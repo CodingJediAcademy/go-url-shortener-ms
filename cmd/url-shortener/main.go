@@ -2,6 +2,8 @@ package main
 
 import (
 	"go-url-shortener-ms/internal/config"
+	"go-url-shortener-ms/internal/lib/logger/sl"
+	"go-url-shortener-ms/internal/storage/sqlite"
 	"log/slog"
 	"os"
 )
@@ -19,6 +21,11 @@ func main() {
 
 	log.Info("init server", slog.String("address", cfg.Address))
 	log.Debug("logger debug mode enabled")
+
+	storage, err := sqlite.New(cfg.StoragePath)
+	if err != nil {
+		log.Error("failed to initialize storage", sl.Err(err))
+	}
 }
 
 func setupLogger(env string) *slog.Logger {
