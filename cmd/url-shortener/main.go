@@ -1,11 +1,15 @@
 package main
 
 import (
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 	"go-url-shortener-ms/internal/config"
 	"go-url-shortener-ms/internal/lib/logger/sl"
 	"go-url-shortener-ms/internal/storage/sqlite"
 	"log/slog"
 	"os"
+
+	mwLogger "go-url-shortener-ms/internal/http-server/middleware/logger"
 )
 
 const (
@@ -26,6 +30,13 @@ func main() {
 	if err != nil {
 		log.Error("failed to initialize storage", sl.Err(err))
 	}
+
+	router := chi.NewRouter()
+	router.Use(middleware.RequestID)
+	router.Use(middleware.Logger)
+	router.Use(middleware.Recoverer)
+	router.Use(middleware.URLFormat)
+	router.Use(mwLogger.New(log))
 }
 
 func setupLogger(env string) *slog.Logger {
