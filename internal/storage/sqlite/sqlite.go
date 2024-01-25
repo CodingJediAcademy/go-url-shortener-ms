@@ -39,7 +39,7 @@ CREATE INDEX IF NOT EXISTS idx_alias on url(alias);
 	return &Storage{db: db}, nil
 }
 
-func (s *Storage) SaveUrl(urlToSave string, alias string) (int64, error) {
+func (s *Storage) SaveURL(urlToSave string, alias string) (int64, error) {
 	const op = "storage.sqlite.SaveUrl"
 
 	stmt, err := s.db.Prepare("INSERT INTO url(url,alias) values(?,?)")
@@ -64,7 +64,7 @@ func (s *Storage) SaveUrl(urlToSave string, alias string) (int64, error) {
 	return id, nil
 }
 
-func (s *Storage) GetUrl(alias string) (string, error) {
+func (s *Storage) GetURL(alias string) (string, error) {
 	const op = "storage.sqlite.GetUrl"
 
 	stmt, err := s.db.Prepare("SELECT url FROM url WHERE alias = ?")

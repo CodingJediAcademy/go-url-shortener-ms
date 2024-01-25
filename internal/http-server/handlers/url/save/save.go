@@ -28,13 +28,14 @@ type Response struct {
 	Alias string `json:"alias"`
 }
 
+//go:generate go run github.com/vektra/mockery/v2@v2.28.2 --name=URLSaver
 type URLSaver interface {
-	SaveURL(URL, alias string) (int64, error)
+	SaveURL(URL string, alias string) (int64, error)
 }
 
 func New(log *slog.Logger, urlSaver URLSaver) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		const op = "handlers.save.New"
+		const op = "handlers.url.save.New"
 
 		log = log.With(
 			slog.String("op", op),
